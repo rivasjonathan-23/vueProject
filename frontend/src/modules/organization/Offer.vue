@@ -102,6 +102,7 @@ export default {
       badgename: "",
       background: null,
       venue: "",
+      mnth: "",
       date: { month: "", day: "", year: "" },
       sending: false,
       rep: 0,
@@ -151,7 +152,6 @@ export default {
         axios
           .post("http://localhost:8081/org/validatecode", { code: bcode })
           .then(res => {
-            alert("here")
             resolve(bcode);
           })
           .catch(err => {
@@ -161,6 +161,7 @@ export default {
     },
     month(m) {
       this.date.month = m;
+      this.mnth = m;
     },
     async offerBadge() {
       var ok = false;
@@ -207,6 +208,7 @@ export default {
           fd.append(key, date[key]);
         }
       }else{
+         fd.append('user', this.$store.getters.token);
         for ( var key in badge ) {
           fd.append(key, badge[key]);
         }
@@ -247,14 +249,21 @@ export default {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
   },
+  watch: {
+    mnth(val) {
+      if (val != "") {
+        $(".month").slideUp();
+      }
+    }
+  },
   mounted() {
     $("#mnth").focus(function() {
       $(".month").slideDown();
     });
 
-    $("#mnth").focusout(function() {
-      $(".month").slideUp();
-    });
+    // $("#mnth").focusout(function() {
+    //   $(".month").slideUp();
+    // });
   },
 };
 </script>

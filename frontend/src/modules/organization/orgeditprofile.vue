@@ -111,12 +111,12 @@ export default {
             }
           })
           .then(res => {
-            alert("Succesfully Updated!")
             this.url = 'http://localhost:8081/static/' + res.data.profilePic
             this.orginfo = res.data
+            this.$router.push("/");
           })
           .catch(err => {
-            alert(err);
+            console.log(err);
           });
       } else {
 

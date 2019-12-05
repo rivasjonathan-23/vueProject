@@ -40,7 +40,7 @@ export default {
     removeRecipient() {
       this.removing = true;
       axios
-        .post("http://localhost:8081/user/remove", this.recipient)
+        .post("http://localhost:8081/org/removerecipient", this.recipient)
         .then(res => {
           this.removing = false;
           this.$emit("submit");

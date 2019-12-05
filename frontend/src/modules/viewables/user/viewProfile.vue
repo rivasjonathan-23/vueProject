@@ -7,22 +7,15 @@
       <h4 class="fullname">{{ userinf.firstname+" "+userinf.lastname }}</h4>
       <p class="username">{{userinf.username}}</p>
     </div>
-    <div v-show="gotinfo" v-bind:class="{smallinfo: resized, changepad: chpad}" class="info">
-      <p class="occupation" v-if="userinf.school != ''">{{"Studying at "+userinf.school}}</p>
-      <p class="occupation" v-if="userinf.profession != ''">{{userinf.profession}}</p>
-      <p class="bday">Born on {{birthdate}}</p>
+    <div v-bind:class="{smallinfo: resized, changepad: chpad}" class="info">
+      <p class="occupation">{{userinf.occupation}}</p>
+      <p class="bday">Born on {{userinf.birthdate.month + " "+userinf.birthdate.day+" ,"+userinf.birthdate.year}}</p>
       <p class="age">{{userinf.age}} years old</p>
       <p class="address">Lives in {{userinf.address}}</p>
       <p class="email">
         Email at
         <span class="emailadd">{{userinf.email}}</span>
       </p>
-
-      <b-button
-        class="update"
-        variant="outline-primary"
-        @click="$router.push('/user_edit_profile')"
-      >Update Profile</b-button>
     </div>
     <div class="outercont" v-bind:class="{smlbcount: resized}">
       <div class="bcountoutercont" v-bind:class="{sml: resized}">
@@ -40,74 +33,63 @@
 <script>
 /*eslint linebreak-style: ["error", "windows"]*/
 import $ from "jquery";
-
+import axios from 'axios'
 export default {
-  name: "Profile",
+  name: "viewProfile",
+  props: {
+    userInfo: Object
+  },
   data() {
     return {
+      user: [],
       userinf: {
         username: "",
         firstname: "",
         lastname: "",
         occupation: "",
+        years: "",
         address: "",
-        profession: "",
-        school: "",
         email: "",
-        birthdate: { month: "", day: null , year: null },
-        age: 21
+        birthdate: { month: "September", day: 23, year: 1998 },
+        age: null
       },
-      image: "",
       size: 0,
-      yrlabel: "",
-      company: "",
-      birthdate: "",
       resized: false,
-      btext: "",
+      btext: "Badge",
       chpad: false,
-      gotinfo: false,
-      fullname:""
+      image:""
     };
   },
   props: {
     badgenum: Number,
   },
   created() {
+    this.getNow()
     this.btext = this.badgenum > 1 ? "Badges" : "Badge";
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
     this.handleResize();
-
-    this.$store.dispatch("getUserInfo").then(resp => {
-      var user = resp.data;
-      console.log("response");
-      console.log(resp.data)
-       this.userInfo = resp.data;
-       console.log(this.userInfo.profession)
-       if (this.userInfo.username !=  null) {
-        this.gotinfo = true;
-       }
-       this.image = `http://localhost:8081/static/${resp.data.profilePic}`
-      this.birthdate =
-        user.birthdate.month +
-        " " +
-        user.birthdate.day +
-        ", " +
-        user.birthdate.year;
-      this.userinf = resp.data;
-      if (this.userinf.years > 1) {
-        this.yrlabel = " years";
-      } else {
-        this.yrlabel = " year";
-      }
-      this.fullname = this.userinf.firstname + " " + this.userinf.lastname
-      this.$emit("atcreate", this.fullname)
-    });
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
+    getNow(){
+      let url = "http://localhost:8081/auth/getuser";
+      let body = { username: this.$route.params.username };
+      axios.post(url, body).then(resp => {
+        let user = resp.data.user
+        this.image = `http://localhost:8081/static/${user.profilePic}`
+        this.userinf.username = user.username,
+        this.userinf.firstname = user.firstname,
+        this.userinf.lastname = user.lastname,
+        this.userinf.occupation = user.profession,
+        this.userinf.address = user.address,
+        this.userinf.email = user.email,
+        this.userinf.birthdate = user.birthdate,
+        this.userinf.age = user.age
+      })
+    },
     redirect(path) {
       this.$router.push(path);
     },
@@ -144,7 +126,6 @@ export default {
 .smlbcount {
   width: 100%;
   margin: 0;
-  padding-bottom: 40px;
 }
 
 .info {
@@ -171,7 +152,7 @@ export default {
   width: 80px;
   top: 24px;
   border-bottom: 5px solid #89bfd6;
-  border-top: 5px solid #f0fbff;
+  border-top: 5px solid #89bfd6;
   border-right: 5px solid #f0fbff;
   border-left: 5px solid #f0fbff;
   overflow: visible;

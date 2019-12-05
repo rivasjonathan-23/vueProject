@@ -223,6 +223,7 @@ export default {
       noChosen: false,
       hasError: false,
       url: null,
+      mnth: "",
       file: null,
       imageSrc:'http://localhost:8081/static/'
     };
@@ -253,10 +254,10 @@ export default {
             }
           })
           .then(res => {
-            alert("Update Succesfully!")
             this.url = this.imageSrc + res.data.profilePic
             this.file = null;
             this.info = res.data
+            this.$router.push("/");
           })
           .catch(err => {
             alert(err);
@@ -273,6 +274,7 @@ export default {
     month(m) {
       this.info.birthdate.month = m;
       this.focus = true;
+      this.mnth = m;
     },
     handleResize() {
       if (window.innerWidth < 1000) {
@@ -289,20 +291,15 @@ export default {
     }
   },
   watch: {
-    focus(val) {
-      if (this.info.birthdate.month != "") {
+    mnth(val) {
+      if (val != "") {
         $(".month").slideUp();
-        this.focus = false;
       }
     }
   },
   mounted() {
     $("#mnth").focus(function() {
       $(".month").slideDown();
-    });
-
-    $("#mnth").focusout(function() {
-      $(".month").slideUp();
     });
   },
   destroyed() {

@@ -150,7 +150,8 @@ import { userInfo } from "os";
 export default {
   name: "Badges",
   props: {
-    userInfo: Object
+    userInfo: Object,
+    fullname: String
   },
   data() {
     return {
@@ -158,7 +159,7 @@ export default {
       badgeCode: "",
       hasData: false,
       error: false,
-      fullname: "Jonathan Rivas",
+      //fullname: "Jonathan Rivas",
       availing: false,
       size: 0,
       resized: false,

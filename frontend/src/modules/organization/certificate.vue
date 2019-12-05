@@ -86,7 +86,8 @@ export default {
   methods: {
     handleCertificationSubmit() {
       this.certifying = true;
-      let badgeInfo = {
+      if (this.badge.recipients.length != 0) {
+       let badgeInfo = {
         code: this.badge.code,
         id: this.badge.id,
         certificateName: this.certificateName,
@@ -105,12 +106,17 @@ export default {
         })
         .catch(err => {
           this.certifying = false;
-          this.errorCertifying = true;
+          alert("Unexpected error occured! Please try again later.")
         });
+      } else {
+        this.certifying = false;
+        this.errorCertifying = true
+      }
     },
     close() {
       this.$bvModal.hide("certify-modal");
     }
+    
   }
 };
 </script>

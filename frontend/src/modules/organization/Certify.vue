@@ -98,14 +98,14 @@
               id="cert"
               class="btn2"
               v-bind:class="{fit: sm}"
-              v-on:click="getBadgeDetail('certify-modal', badge._id, badge.code, badge.date, badge.recipient)"
+              v-on:click="getBadgeDetail('certify-modal', badge._id, badge.code, badge.date, badge.recipients)"
             >Certify Recipients</b-button>
 
             <b-button
               variant="info"
               class="btn2"
               v-bind:class="{fit: sm}"
-              v-on:click="getBadgeDetail('addRecipient-modal', badge._id, badge.code, badge.date, [])"
+              v-on:click="getBadgeDetail('addRecipient-modal', badge._id, badge.code, badge.date, badge.recipients)"
             >Add Recipient</b-button>
             <b-button
               variant="danger"
@@ -357,8 +357,7 @@ export default {
 
     deleteb() {
       this.removing = true;
-      alert(this.btodelete.id)
-      axios.post("http://localhost:8081/org/deletebadge/"+this.btodeleted.id)
+      axios.post("http://localhost:8081/org/deletebadge/"+this.btodelete.id)
      .then(resp => {
         this.getData();
         this.removing = false;

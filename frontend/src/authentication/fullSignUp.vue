@@ -20,8 +20,8 @@
             <span
               class="err"
               v-bind:class="{red: errlen}"
-              v-if="username && username.length < 7"
-            >must be at least 7 characters!</span>
+              v-if="username && username.length < 5"
+            >must be at least 5 characters!</span>
           </transition>
         </div>
         <div class="inputholder">
@@ -113,6 +113,7 @@
                 max="32"
                 class="binput"
                 required
+                autocomplete="off"
                 v-model="birthdate.day"
               ></b-input>
             </td>
@@ -170,7 +171,7 @@
           <p class="ertxt" v-if="noChosen">Are you working or studying? Please fill up.</p>
           <p class="ertxt" v-if="err">The username you've entered is already taken!</p>
           <p class="ertxt" v-if="passhort">Your password is weak! Must be 8 or more characters.</p>
-          <p class="ertxt" v-if="errlen">Your username is less than 7 characters!</p>
+          <p class="ertxt" v-if="errlen">Your username is less than 5 characters!</p>
           <p class="ertxt" v-if="passErr">Password did not match!</p>
         </div>
         <div class="noChsn" v-show="netErr">Network error! Please try again later.</div>
@@ -196,20 +197,21 @@ export default {
   name: "FullSignUp",
   data() {
     return {
-      username: "rivas",
-      password: "jrivas2398",
-      confirmpassword: "jrivas2398",
-      firstname: "Jonathan",
-      lastname: "Rivas",
-      email: "rivas@gmail.com",
-      age: 21,
-      address: "address",
+      username: "",
+      password: "",
+      confirmpassword: "",
+      firstname: "",
+      lastname: "",
+      email: "",
+      age: null,
+      address: "",
       profession: "",
       school: "",
       gender: "Male",
-      birthdate: { month: "February", day: 23, year: 2019 },
+      birthdate: { month: "", day: "", year: "" },
       type: "",
       loading: false,
+      mnth: "",
       cal: [
         "January",
         "February",
@@ -290,11 +292,12 @@ export default {
       this.passhort = this.password.length < 8;
       this.passErr = this.password != this.confirmpassword;
       this.noChosen = this.school === "" && this.profession === "";
-      this.errlen = this.username.length < 7;
+      this.errlen = this.username.length < 5;
       return !this.errlen && !this.passErr && !this.passhort && !this.noChosen;
     },
     month(m) {
       this.birthdate.month = m;
+      this.mnth = m;
       this.focus = true;
     },
     handleResize() {
@@ -306,21 +309,18 @@ export default {
     }
   },
   watch: {
-    focus(val) {
-      if (this.birthdate.month != "") {
+    mnth(val) {
+      if (val != "") {
         $(".month").slideUp();
-        this.focus = false;
       }
     }
+
   },
   mounted() {
     $("#mnth").focus(function() {
       $(".month").slideDown();
     });
 
-    $("#mnth").focusout(function() {
-      $(".month").slideUp();
-    });
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);

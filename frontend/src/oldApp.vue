@@ -35,17 +35,7 @@
       <b-form>
         <b-form-input id="searchb" v-model="person" placeholder="Enter username"></b-form-input>
       </b-form>
-    
-       <div class="divSearch">
-        <b-row>
-          <b-col>
-            <b-button block variant="outline-danger" @click="$bvModal.hide('searchUser')">Exit</b-button>
-          </b-col>
-          <b-col cols="8">
-            <b-button block variant="outline-success" @click="search">Search Now</b-button>
-          </b-col>
-        </b-row>
-      </div>
+      <b-button class="closeSearch" block @click="$bvModal.hide('searchUser')">Exit</b-button>
     </b-modal>
     <div>
       <center>
@@ -114,11 +104,21 @@ export default {
         this.insignup = false;
       }
     },
-    
     search() {
-      this.$bvModal.hide("searchUser");
-      this.$router.push({ path: "/viewuser/" + this.person });
-      this.person = ""
+      let user = { user: this.person };
+      axios.post("http://localhost:8081/search", user).then(
+        response => {
+          if (response.data.respond != "Cannot find user!") {
+            console.log(response.data);
+            alert(response.data.respond);
+          } else {
+            alert(response.data.respond);
+          }
+        },
+        err => {
+          console.log("error");
+        }
+      );
     },
     signout() {
       this.$store.dispatch("logout").then(() => {

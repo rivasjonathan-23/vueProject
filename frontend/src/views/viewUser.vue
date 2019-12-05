@@ -2,12 +2,12 @@
   <div class="page" v-bind:class="{small: resized}">
     <b-row>
       <b-col cols="12">
-        <Profile @atcreate="getname" :badgenum="numofbadge" ></Profile>
+        <Profile :badgenum="numofbadge" ></Profile>
       </b-col>
     </b-row>
     <b-row>
       <b-col class="views" cols="12">
-        <Badges :fullname="fullname" @badgeCount="getBadgeCount"></Badges>
+        <Badges :fullname="fullname" :id="id" @badgeCount="getBadgeCount"></Badges>
       </b-col>
     </b-row>
   </div>
@@ -16,21 +16,23 @@
 <script>
 /*eslint linebreak-style: ["error", "windows"]*/
 import axios from "axios";
-import Profile from "@/modules/user/Profile.vue";
-import Badges from "@/modules/user/Mybadge.vue";
+import Profile from "@/modules/viewables/user/viewProfile.vue";
+import Badges from "@/modules/viewables/user/viewMybadge.vue";
 import $ from "jquery";
 
 export default {
   name: "userpage",
-  props: {
-    userInfo: Object
+  props:{
+    id: String,
+    fullname: String
   },
   data() {
     return {
       badgeCode: "",
       resized: false,
       numofbadge: 0,
-      fullname: ""
+      username: "",
+      user: null
     };
   },
   components: {
@@ -38,17 +40,14 @@ export default {
     Badges
   },
   created() {
-    this.$emit("arrived");
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
+    localStorage.setItem("view", this.userInfo)
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    getname(val){
-      this.fullname = val
-    },
     redirect(path) {
       this.$router.push(path);
     },
@@ -58,9 +57,6 @@ export default {
       } else {
         this.resized = false;
       }
-    },
-    redirect(path) {
-      this.$router.push(path);
     },
     getBadgeCount(count) {
       this.numofbadge = count;
@@ -82,13 +78,12 @@ export default {
 .pd-side {
   padding-left: 20px;
   padding-right: 20px;
- 
 }
 
 .page {
   padding-top: 51px;
   width: 1200px;
-  background:white;
+  background: white;
 }
 
 .small {

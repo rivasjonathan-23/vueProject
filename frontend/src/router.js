@@ -16,6 +16,7 @@ import UserBadgelist from "./modules/user/Mybadge.vue";
 
 import badges from "./modules/organization/Badges.vue";
 import certify from "./modules/organization/Certify.vue";
+import Redirect from './views/redirect.vue';
 
 Vue.use(Router);
 
@@ -39,6 +40,12 @@ let router = new Router({
         next();
       }
     },
+  },
+  {
+    path: "/viewuser/:username",
+    name: "viewuser",
+    component: Redirect,
+    props: true
   },
 
 

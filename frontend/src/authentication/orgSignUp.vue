@@ -20,8 +20,8 @@
             <span
               class="err"
               v-bind:class="{red: errlen}"
-              v-if="username && username.length < 7"
-            >must be at least 7 characters!</span>
+              v-if="username && username.length < 5"
+            >must be at least 5 characters!</span>
           </transition>
         </div>
         <div class="inputholder">
@@ -85,7 +85,7 @@
         <div class="noChsn" v-show="hasError">
           <p class="ertxt" v-if="err">The username you've entered is already taken!</p>
           <p class="ertxt" v-if="passhort">Your password is weak! Must be 8 or more characters.</p>
-          <p class="ertxt" v-if="errlen">Your username is less than 7 characters!</p>
+          <p class="ertxt" v-if="errlen">Your username is less than 5 characters!</p>
           <p class="ertxt" v-if="passErr">Password did not match!</p>
         </div>
         <div class="noChsn" v-show="netErr"> Network error! Please try again later.</div>
@@ -110,14 +110,14 @@ export default {
   name: "FullSignUp",
   data() {
     return {
-      username: "jrivas23",
-      password: "jrivas2398",
-      confirmpassword: "jrivas2398",
-      orgName: "Passerelles Numeriques",
-      email: "rivas23@gmail.com",
-      years: "2001",
-      address: "Nasipit, Talamban, Cebu City",
-      description:"Our mission is to provide education, technical and professional training in the digital sector to young underprivileged people by leveraging their potential and willpower. We endeavour to truly develop their employability which will allow them and their families to escape poverty in a sustainable way, and contribute to the social and economic development of their countries.",
+      username: "",
+      password: "",
+      confirmpassword: "",
+      orgName: "",
+      email: "",
+      years: "",
+      address: "",
+      description: "",
       err: false,
       loading: false,
       type: "",
@@ -128,6 +128,7 @@ export default {
       hasError: false,
       errlen: false,
       netErr: false,
+      mnth: "",
       
     };
   },
@@ -180,7 +181,7 @@ export default {
       this.loading = true;
       this.passhort = this.password.length < 8;
       this.passErr = this.password != this.confirmpassword;
-      this.errlen = this.username.length < 7;
+      this.errlen = this.username.length < 5;
       return !this.errlen && !this.passErr && !this.passhort;
     },
     handleResize() {
@@ -190,11 +191,6 @@ export default {
         this.resized = false;
       }
     }
-  },
-  mounted() {
-    $("#mnth").focus(function() {
-      $(".month").slideDown();
-    });
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);
