@@ -170,7 +170,7 @@
     </div>
     <br>
     <div v-if="!removing" class="text-right">
-     <b-button variant="danger" @click="deleteb" class="mrgn3">Cancel</b-button>
+     <b-button variant="danger" @click="$bvModal.hide('deleteBadge')" class="mrgn3">Cancel</b-button>
      <b-button @click="deleteb" :disabled="inputbname != badgename" variant="primary" class="mrgn3">Delete</b-button>
     </div>
      <div v-else class="add">
